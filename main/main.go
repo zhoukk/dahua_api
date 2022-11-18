@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/xml"
 	"errors"
 	"flag"
 	"fmt"
@@ -11,14 +10,6 @@ import (
 
 	"github.com/zhoukk/dahua_api"
 )
-
-type DeviceInfo struct {
-	XMLName         xml.Name `xml:"DeviceInfo,omitempty"`
-	XMLVersion      string   `xml:"version,attr"`
-	XMLNamespace    string   `xml:"xmlns,attr"`
-	SerialNumber    string   `xml:"serialNumber" json:"serialNumber"`
-	SubSerialNumber string   `xml:"subSerialNumber,omitempty" json:"subSerialNumber,omitempty"`
-}
 
 func main() {
 	var host string
@@ -35,18 +26,13 @@ func main() {
 	ret := make(map[string]string)
 	err := errors.New("")
 
-	device_id := ""
-
 	err = c.CGI("magicBox.cgi", "getSerialNo", nil, ret)
 	if err != nil {
 		log.Println(err)
 	} else {
-		device_id = ret["sn"]
-		log.Printf("device: %s\n", device_id)
 		log.Printf("%+v\n", ret)
 	}
 
-	// // FTP设置
 	arg = url.Values{}
 	ret = make(map[string]string)
 	arg.Add("name", "NAS")
@@ -54,7 +40,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			if strings.HasPrefix(k, "table.NAS[0]") {
 				log.Println(k, "=", v)
@@ -76,13 +61,11 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			log.Println(k, "=", v)
 		}
 	}
 
-	// // 存储点设置
 	arg = url.Values{}
 	ret = make(map[string]string)
 	arg.Add("name", "RecordStoragePoint")
@@ -90,7 +73,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			if strings.HasPrefix(k, "table.RecordStoragePoint[0]") {
 				log.Println(k, "=", v)
@@ -105,13 +87,11 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			log.Println(k, "=", v)
 		}
 	}
 
-	// // NTP设置
 	arg = url.Values{}
 	ret = make(map[string]string)
 	arg.Add("name", "NTP")
@@ -119,7 +99,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			if strings.HasPrefix(k, "table.NTP") {
 				log.Println(k, "=", v)
@@ -139,13 +118,11 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			log.Println(k, "=", v)
 		}
 	}
 
-	// 抓图计划设置
 	arg = url.Values{}
 	ret = make(map[string]string)
 	arg.Add("name", "Snap")
@@ -153,7 +130,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			if strings.HasPrefix(k, "table.Snap[0]") {
 				log.Println(k, "=", v)
@@ -168,19 +144,15 @@ func main() {
 		arg.Add(fmt.Sprintf("Snap[0].TimeSection[%d][0]", wd), "1 00:00:00-23:59:59")
 	}
 
-	log.Printf("%+v\n", arg)
-
 	err = c.CGI("configManager.cgi", "setConfig", arg, ret)
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			log.Println(k, "=", v)
 		}
 	}
 
-	// 定时抓拍
 	arg = url.Values{}
 	ret = make(map[string]string)
 	arg.Add("name", "Encode[0].SnapFormat")
@@ -188,7 +160,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			if strings.HasPrefix(k, "table.Encode[0].SnapFormat[0].Video") {
 				log.Println(k, "=", v)
@@ -204,7 +175,6 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	} else {
-		// log.Printf("%+v\n", info)
 		for k, v := range ret {
 			log.Println(k, "=", v)
 		}

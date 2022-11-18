@@ -10,7 +10,6 @@ import (
 	"hash"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -355,7 +354,6 @@ func (c *DahuaApiClient) CGI(cgi, action string, arg url.Values, ret map[string]
 	}
 
 	url := &url.URL{Scheme: c.proto, Host: c.host, Path: "/cgi-bin/" + cgi, RawQuery: "action=" + action + buf.String()}
-	log.Println(url)
 	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return err
